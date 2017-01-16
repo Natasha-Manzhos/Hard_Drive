@@ -5,6 +5,7 @@ if (!require("dplyr"))    install.packages("dplyr")
 if (!require("stringr"))  install.packages("stringr")
 if (!require("tidyr"))    install.packages("tidyr")
 if (!require("gridExtra"))install.packages("gridExtra")
+if (!require("caret"))    install.packages("caret")
 
 # Load librarys
 library (corrplot)
@@ -13,26 +14,23 @@ library (dplyr)
 library (stringr)
 library (tidyr)
 library (gridExtra)
+library (caret)
 
 # Clear global environment
 rm(list = ls())
 
 # Receving names of file in dir "data_Q3_2016"
 file_names   <- list.files(path="data_Q3_2016",pattern="*.csv")
-# Receving number of file in dir "data_Q3_2016"
-N_file_names <- length(file_names)
-# Set up current idr
+# Set up current dir
 setwd("data_Q3_2016")
-# Claer viable
-dataset <- 0
+# Clear data
+dataset <- NULL
 
-# Read first file from dir
-dataset <- read.csv(file_names[1])
 # Read all other files
-for(i in 2:N_file_names){
+for(file_name in file_names){
   # Read next file
-  data    <- read.csv(file_names[i])
-  # Mergerdata
+  data    <- read.csv(file_name)
+  # Merger data
   dataset <- rbind.data.frame(dataset,data)
 }
 
@@ -49,6 +47,7 @@ View(dataset)
 # Choose columns for work
 hard_drive <- dataset[c("date","serial_number","model","capacity_bytes",
                         "failure","smart_9_raw","smart_9_normalized")]
+remove(dataset)
 View(hard_drive)
 
 # Temporary work database for work
@@ -81,7 +80,7 @@ test_hard_drive$failure <- as.factor(test_hard_drive$failure)
 str(test_hard_drive)
 
 # Dependence capacity (in TB) on firm
-# Facet - failure (0 - work, 1- not) (Picture)
+# Facet - failure (0 - work, 1 - not) (Picture)
 ggplot(test_hard_drive, aes(x=firm,y=T_capacity_bytes,color=firm))+geom_jitter()+facet_wrap(~failure,nrow=2,scales = "free")
 
 # Dependence number of record on each firm + 
