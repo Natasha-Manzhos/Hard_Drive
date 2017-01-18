@@ -55,9 +55,10 @@ nearZeroVar(dataset, saveMetrics = TRUE)
 # smart_9_raw            1.007834  0.8058683444   FALSE FALSE
 # smart_12_raw           1.085338  0.0042370829   FALSE FALSE
 # smart_190_raw          1.028422  0.0005897771   FALSE FALSE
-# save dataset to get in futher quicker
-write.csv(dataset, "hd_selected_set.csv")
 
+# save and load processed dataset for easy access. 
+write.csv(dataset, "hd_selected_set.csv")
+dataset <- read.csv("hd_selected_set.csv")
 summary(dataset)
 str(dataset)
 
@@ -65,3 +66,8 @@ table(dataset$failure)
 #  0       1 
 # 6442753     359 
 
+# get only serial number for disks which were broken (359 records)
+serialFailed <- as.character(dataset[which(dataset$failure==1), "serial_number"])
+# dataset with all records for broken disks 
+datasetSerialFailed <- dataset[which(dataset$serial_number %in% serialFailed),]
+write.csv(datasetSerialFailed, "datasetSerialFailed")
