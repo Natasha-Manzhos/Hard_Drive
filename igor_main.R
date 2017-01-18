@@ -71,3 +71,5 @@ serialFailed <- as.character(dataset[which(dataset$failure==1), "serial_number"]
 # dataset with all records for broken disks 
 datasetSerialFailed <- dataset[which(dataset$serial_number %in% serialFailed),]
 write.csv(datasetSerialFailed, "datasetSerialFailed")
+
+# new comment
